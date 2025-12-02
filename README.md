@@ -1,110 +1,129 @@
-# 📧 Drip Mode Scheduler
+# Folder & Drip Campaign Scheduler
 
-A beautiful, vanilla JavaScript application for configuring drip campaign schedules with n8n integration. Perfect for email campaigns, batch processing, and automated workflows.
+A beautiful, integrated web application that combines folder selection with drip campaign scheduling for n8n workflow automation.
 
-## ✨ Features
+![Version](https://img.shields.io/badge/version-2.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-- **Two Operation Modes:**
-  - **Manual Mode**: Control batch size and frequency between executions
-  - **Automated Mode**: Set total count and let the system distribute evenly across time slots
+## Features
 
-- **Flexible Scheduling:**
-  - Date range selection
-  - Day of week filtering (Monday-Sunday)
-  - Time range restrictions (e.g., only run 9 AM - 5 PM)
+### Folder Selection
+- Dynamically loads folders from your API
+- Required selection before campaign deployment
+- Auto-saves selected folder
 
-- **Smart Calculations:**
-  - Automatic schedule generation
-  - Even distribution for automated mode
-  - Preview timeline before deployment
+### Campaign Modes
 
-- **User-Friendly:**
-  - Modern, responsive design
-  - Real-time validation
-  - Auto-save to localStorage
-  - Visual schedule preview
+**Manual Mode:**
+- Set batch size (items per execution)
+- Set frequency (hours between executions)
+- Perfect for regular, predictable campaigns
 
-## 🚀 Quick Start
+**Automated Mode:**
+- Set total item count
+- Automatically distributes evenly across available time slots
+- Perfect for spreading items over a time period
 
-### Local Development
+### Scheduling Options
 
-1. Clone this repository
-2. Open `index.html` in your browser
-3. That's it! No build process required.
+- **Date Range**: Start and end dates for your campaign
+- **Days to Run**: Select specific days of the week (Mon-Sun)
+- **Time Restrictions**: Set time window (e.g., 9 AM - 5 PM)
+- **Smart Calculations**: Automatic schedule generation with even distribution
 
-### GitHub Pages Deployment
+### Preview & Deploy
 
-1. **Create a new repository on GitHub**
+- Preview complete schedule before deployment
+- See total executions, items, and timing
+- View detailed execution timeline
+- Deploy to n8n with one click
 
-2. **Add your files:**
+## Quick Start
+
+### 1. Local Testing
+
+Open `index.html` in your web browser:
+
+```bash
+# Option 1: Direct open
+open index.html
+
+# Option 2: Local server (Python)
+python3 -m http.server 8000
+# Visit: http://localhost:8000
+
+# Option 3: Local server (Node.js)
+npx serve .
+```
+
+### 2. Configure API Endpoints
+
+The application uses these API endpoints (configured in `app.js`):
+
+- **Folder Options API**: Loads folder dropdown options
+- **Submit Endpoint**: Receives the complete schedule payload
+
+To change these, edit the constants at the top of `app.js`:
+
+```javascript
+this.FOLDER_API = 'your-folder-api-url';
+this.SUBMIT_API = 'your-submit-webhook-url';
+```
+
+### 3. Use the Application
+
+1. **Select a Folder** - Choose from the loaded options
+2. **Choose Mode** - Manual or Automated
+3. **Set Date Range** - Campaign start and end dates
+4. **Select Days** - Which days to run (Mon-Sun)
+5. **Set Time Window** - Time restrictions (e.g., 9 AM - 5 PM)
+6. **Configure Batch** - Batch size or total count
+7. **Preview** - Review the complete schedule
+8. **Deploy** - Send to n8n webhook
+
+## Deployment
+
+### GitHub Pages (Recommended)
+
+1. **Push to GitHub:**
    ```bash
    git init
    git add .
    git commit -m "Initial commit"
    git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/drip-scheduler.git
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
    git push -u origin main
    ```
 
-3. **Enable GitHub Pages:**
-   - Go to your repository settings
-   - Navigate to "Pages" section
-   - Select "Deploy from a branch"
-   - Choose `main` branch and `/ (root)` folder
-   - Click "Save"
+2. **Enable GitHub Pages:**
+   - Go to repository Settings → Pages
+   - Source: `main` branch, `/ (root)` folder
+   - Click Save
 
-4. **Access your app:**
-   - Your app will be live at: `https://YOUR_USERNAME.github.io/drip-scheduler/`
-   - GitHub Pages usually takes 1-2 minutes to deploy
+3. **Access your app:**
+   ```
+   https://YOUR_USERNAME.github.io/YOUR_REPO/
+   ```
 
-## 📖 How to Use
+### Other Hosting Options
 
-### 1. Choose Your Mode
+- **Netlify**: Drag & drop at https://app.netlify.com/drop
+- **Vercel**: `npx vercel`
+- **Cloudflare Pages**: Connect your GitHub repo
+- **Firebase Hosting**: `firebase deploy`
 
-**Manual Mode:**
-- Best for: Regular, predictable batches
-- Configure: Batch size (items per run) and frequency (time between runs)
-- Example: Send 50 emails every 2 hours
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions.
 
-**Automated Mode:**
-- Best for: Spreading a total count across a time period
-- Configure: Total items to process
-- Example: Send 1000 emails evenly distributed over 2 weeks
+## Webhook Payload Structure
 
-### 2. Set Campaign Period
-
-- **Start Date**: When your campaign begins
-- **End Date**: When your campaign ends
-
-### 3. Configure Restrictions
-
-**Days to Run:**
-- Select which days of the week to run (Monday-Sunday)
-- Example: Only run on weekdays (Mon-Fri)
-
-**Time Restrictions:**
-- Set the time window for executions
-- Example: Only run between 9:00 AM and 5:00 PM
-
-### 4. Configure n8n Webhook
-
-- Enter your n8n webhook URL
-- Example: `https://your-n8n-instance.com/webhook/drip-campaign`
-
-### 5. Preview & Deploy
-
-- Click **"Preview Schedule"** to see the execution timeline
-- Review total executions, items, and timing
-- Click **"Deploy Campaign"** to send to n8n
-
-## 🔧 Integration with n8n
-
-### Webhook Payload Structure
-
-The application sends the following JSON to your n8n webhook:
+The application sends a comprehensive JSON payload to your n8n webhook:
 
 ```json
 {
+  "folder": {
+    "value": "folder-id",
+    "label": "Folder Name"
+  },
   "mode": "automated",
   "dateRange": {
     "start": "2025-01-01",
@@ -125,7 +144,6 @@ The application sends the following JSON to your n8n webhook:
       "timestamp": "2025-01-01T09:00:00.000Z",
       "batchSize": 77
     }
-    // ... more executions
   ],
   "summary": {
     "totalExecutions": 13,
@@ -136,147 +154,195 @@ The application sends the following JSON to your n8n webhook:
 }
 ```
 
-### n8n Workflow Setup
+## n8n Workflow Integration
 
-1. Create a **Webhook** node (set to POST method)
-2. Add processing nodes to handle the `calculatedExecutions` array
-3. Use **Schedule Trigger** or **Wait** nodes to execute at specified timestamps
-4. Store configuration in a database for persistent scheduling
-
-### Example n8n Workflow Structure
+### Example Workflow
 
 ```
-Webhook (Receive Config)
+Webhook (Receive Payload)
+    ↓
+Extract Folder & Schedule Data
     ↓
 Store in Database
     ↓
-Schedule Trigger (Check every hour)
+Schedule Trigger (Run at specified times)
     ↓
-Read from Database
-    ↓
-Check if execution time matches
-    ↓
-Execute Batch
-    ↓
-Update Database (Mark as completed)
+Execute Batches for Selected Folder
 ```
 
-## 🎨 Customization
+### Webhook Node Setup
 
-### Styling
+1. Create a **Webhook** node in n8n
+2. Set method to **POST**
+3. Use the webhook URL in your app configuration
+4. Enable CORS headers:
+   ```
+   Access-Control-Allow-Origin: *
+   Access-Control-Allow-Methods: GET, POST, OPTIONS
+   Access-Control-Allow-Headers: Content-Type
+   ```
 
-All styles are in `styles.css`. Key CSS variables:
+### Processing the Data
 
-```css
-:root {
-    --primary-color: #4f46e5;      /* Main brand color */
-    --success-color: #10b981;      /* Success messages */
-    --error-color: #ef4444;        /* Error messages */
-    --bg-color: #f8fafc;           /* Background */
-    --card-bg: #ffffff;            /* Card background */
-}
-```
+Access the data in your n8n workflow:
 
-### Calculations
+- `{{ $json.folder.value }}` - Selected folder ID
+- `{{ $json.folder.label }}` - Selected folder name
+- `{{ $json.mode }}` - Campaign mode (manual/automated)
+- `{{ $json.calculatedExecutions }}` - Array of scheduled executions
+- `{{ $json.summary }}` - Summary statistics
 
-The scheduling logic is in `app.js`:
-
-- `calculateManualSchedule()` - Manual mode calculations
-- `calculateAutomatedSchedule()` - Automated mode distribution
-- `calculateTimeSlots()` - Available time slots based on restrictions
-
-### Default Values
-
-Edit in `app.js` constructor or HTML:
-
-```javascript
-// Default time range
-document.getElementById('timeFrom').value = '09:00';
-document.getElementById('timeTo').value = '17:00';
-
-// Default batch size
-document.getElementById('batchSize').value = 10;
-```
-
-## 📱 Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 🔒 Security Notes
-
-### For Production Use:
-
-1. **Protect your webhook URL:**
-   - Don't commit webhook URLs to public repositories
-   - Use environment-specific configurations
-   - Add API key validation in n8n
-
-2. **n8n Security:**
-   - Enable authentication on your webhook
-   - Use HTTPS only
-   - Validate all incoming data
-   - Rate limit webhook requests
-
-3. **CORS Configuration:**
-   - Configure n8n to accept requests from your domain
-   - In n8n webhook settings, set allowed origins
-
-## 📄 Files Structure
+## Project Structure
 
 ```
 drip-scheduler/
-├── index.html          # Main HTML structure
-├── styles.css          # All styling
-├── app.js             # Application logic
-└── README.md          # Documentation
+├── index.html          # Main application interface
+├── app.js              # Application logic & scheduling algorithms
+├── styles.css          # Modern, responsive styling
+├── package.json        # Project metadata & scripts
+├── .gitignore         # Git exclusions
+├── README.md          # This file
+└── DEPLOYMENT_GUIDE.md # Detailed deployment instructions
 ```
 
-## 🐛 Troubleshooting
+## Features Checklist
 
-**Issue: Webhook not receiving data**
-- Check webhook URL is correct
-- Verify n8n webhook is set to POST method
-- Check browser console for CORS errors
+✅ Dynamic folder loading from API
+✅ Two campaign modes (Manual/Automated)
+✅ Flexible date and time scheduling
+✅ Day-of-week filtering
+✅ Smart batch distribution
+✅ Real-time preview
+✅ Auto-save configuration
+✅ Responsive design
+✅ Error handling
+✅ Form validation
+✅ No dependencies
+✅ Single static page
 
-**Issue: No executions generated**
-- Verify date range is valid (end > start)
-- Check at least one day is selected
-- Ensure time range is valid
+## Browser Support
 
-**Issue: Preview not showing**
+- ✅ Chrome/Edge (latest)
+- ✅ Firefox (latest)
+- ✅ Safari (latest)
+- ✅ Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Customization
+
+### Change Colors
+
+Edit `styles.css` (:root section):
+
+```css
+:root {
+    --primary-color: #64748b;    /* Main brand color */
+    --success-color: #10b981;    /* Success messages */
+    --error-color: #ef4444;      /* Error messages */
+}
+```
+
+### Modify Default Values
+
+Edit `app.js` in the `setDefaultDates()` method or change HTML input values.
+
+### Add Custom Validation
+
+Extend the validation methods in `app.js`:
+
+```javascript
+validateDates() {
+    // Add your custom validation logic
+}
+```
+
+## Troubleshooting
+
+**Folders not loading:**
 - Check browser console for errors
-- Verify dates are selected
-- Ensure at least one day is checked
+- Verify API endpoint is correct and accessible
+- Check CORS settings on your API
 
-## 🤝 Contributing
+**Deployment fails:**
+- Verify webhook endpoint is correct
+- Check n8n webhook is active and set to POST
+- Review browser console for error messages
+
+**Preview shows no executions:**
+- Ensure date range is valid (end > start)
+- Verify at least one day is selected
+- Check time range is valid
+
+## Security Notes
+
+### For Production:
+
+1. **API Security:**
+   - Use HTTPS for all endpoints
+   - Implement authentication on webhooks
+   - Validate all incoming data in n8n
+
+2. **CORS Configuration:**
+   - Configure n8n to accept requests from your domain
+   - Replace `*` with your specific domain in production
+
+3. **Data Validation:**
+   - All inputs are validated client-side
+   - Implement server-side validation in n8n
+   - Sanitize data before database storage
+
+## Example Use Cases
+
+### 1. Email Drip Campaign
+- Select email list folder
+- Set automated mode with 1000 contacts
+- Spread over 2 weeks, weekdays only, 9 AM - 5 PM
+- Deploy and let n8n handle execution
+
+### 2. Social Media Posting
+- Select content folder
+- Manual mode: 1 post every 3 hours
+- All week, 8 AM - 8 PM
+- Consistent timing throughout campaign
+
+### 3. Data Processing
+- Select data folder
+- Automated mode: 5000 records
+- Weekdays only to avoid peak times
+- Process in batches automatically
+
+## Auto-Save Feature
+
+The application automatically saves your configuration to localStorage:
+- Saves on every input change
+- Persists through page refreshes
+- Clears after successful deployment
+- Privacy-friendly (stored locally only)
+
+## Technical Details
+
+- **Pure vanilla JavaScript** - No frameworks or build tools
+- **Zero dependencies** - Works out of the box
+- **Modern ES6+** - Async/await, arrow functions, classes
+- **Responsive CSS** - Mobile-first design
+- **LocalStorage** - Auto-save configuration
+- **Fetch API** - Modern HTTP requests
+
+## Contributing
 
 Feel free to fork and submit pull requests!
 
-## 📝 License
+## License
 
-MIT License - feel free to use in your projects
+MIT License - Free to use and modify
 
-## 🙋 Support
+## Support
 
-For issues or questions:
-1. Check the troubleshooting section
-2. Review browser console for errors
-3. Verify n8n webhook configuration
-
-## 🎯 Roadmap
-
-Potential future features:
-- [ ] Timezone support
-- [ ] Holiday exclusions
-- [ ] Export schedule to CSV
-- [ ] Multiple webhook destinations
-- [ ] Schedule templates
-- [ ] Visual calendar view
-- [ ] Execution history tracking
+For issues:
+1. Check browser console for errors
+2. Verify API endpoints are accessible
+3. Review n8n webhook configuration
+4. Test with smaller date ranges first
 
 ---
 
-Built with ❤️ using Vanilla JavaScript
+**Built with vanilla JavaScript for maximum compatibility and zero dependencies.**

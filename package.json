@@ -1,0 +1,35 @@
+{
+  "name": "drip-scheduler",
+  "version": "1.0.0",
+  "description": "A beautiful vanilla JavaScript drip campaign scheduler with n8n integration",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "start:node": "npx serve .",
+    "test": "echo \"Open test.html in your browser to run tests\" && exit 0",
+    "deploy": "echo \"See DEPLOY.md for GitHub Pages deployment instructions\" && exit 0",
+    "validate": "echo \"Checking HTML validity...\" && npx html-validate index.html test.html",
+    "format": "echo \"No formatting needed - vanilla HTML/CSS/JS!\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_USERNAME/drip-scheduler.git"
+  },
+  "keywords": [
+    "drip-campaign",
+    "scheduler",
+    "n8n",
+    "automation",
+    "workflow",
+    "email-marketing",
+    "batch-processing"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/drip-scheduler/issues"
+  },
+  "homepage": "https://YOUR_USERNAME.github.io/drip-scheduler/",
+  "devDependencies": {},
+  "dependencies": {}
+}

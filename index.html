@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drip Campaign Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <form id="integratedForm">
+
+                <!-- Folder Selection -->
+                <div class="field-group">
+                    <label for="folderSelect">Folder <span class="required">*</span></label>
+                    <select id="folderSelect" name="folderSelect" required>
+                        <option value="">Loading folders...</option>
+                    </select>
+                    <div id="folderLoadStatus" class="inline-status"></div>
+                </div>
+
+                <!-- Execution Mode -->
+                <div class="field-group">
+                    <label>Execution Mode</label>
+                    <div class="mode-toggle">
+                        <button type="button" class="mode-btn active" data-mode="manual">Manual</button>
+                        <button type="button" class="mode-btn" data-mode="automated">Automated</button>
+                    </div>
+                    <input type="hidden" name="mode" id="modeInput" value="manual">
+                </div>
+
+                <!-- Campaign Period & Settings Row -->
+                <div class="split-row">
+                    <!-- Left: Campaign Period -->
+                    <div class="field-group">
+                        <label>Campaign Period</label>
+                        <div class="sub-field">
+                            <label for="startDate" class="sub-label">Start Date</label>
+                            <input type="date" id="startDate" name="startDate" required>
+                        </div>
+                        <div class="sub-field">
+                            <label for="endDate" class="sub-label">End Date</label>
+                            <input type="date" id="endDate" name="endDate" required>
+                        </div>
+                    </div>
+
+                    <!-- Right: Mode Settings -->
+                    <div class="field-group">
+                        <!-- Manual Mode Settings -->
+                        <div id="manualSettings" class="mode-settings">
+                            <label>Manual Mode Settings</label>
+                            <div class="sub-field">
+                                <label for="batchSize" class="sub-label">Batch Size</label>
+                                <input type="number" id="batchSize" name="batchSize" min="1" value="10" placeholder="10">
+                            </div>
+                            <div class="sub-field">
+                                <label for="frequency" class="sub-label">Frequency (hours)</label>
+                                <input type="number" id="frequency" name="frequency" min="1" step="0.5" value="2" placeholder="2">
+                            </div>
+                        </div>
+
+                        <!-- Automated Mode Settings -->
+                        <div id="automatedSettings" class="mode-settings" style="display: none;">
+                            <label>Automated Mode Settings</label>
+                            <div class="sub-field">
+                                <label for="totalCount" class="sub-label">Total Items</label>
+                                <input type="number" id="totalCount" name="totalCount" min="1" value="100" placeholder="100">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Days to Run -->
+                <div class="field-group">
+                    <label>Days to Run</label>
+                    <div class="days-selector">
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="monday" checked>
+                            <span>Mon</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="tuesday" checked>
+                            <span>Tue</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="wednesday" checked>
+                            <span>Wed</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="thursday" checked>
+                            <span>Thu</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="friday" checked>
+                            <span>Fri</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="saturday">
+                            <span>Sat</span>
+                        </label>
+                        <label class="day-btn">
+                            <input type="checkbox" name="days" value="sunday">
+                            <span>Sun</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Time Restrictions -->
+                <div class="field-group">
+                    <label>Time Restrictions</label>
+                    <div class="time-row">
+                        <div class="time-field">
+                            <label for="timeFrom" class="sub-label">From</label>
+                            <input type="time" id="timeFrom" name="timeFrom" value="08:00">
+                        </div>
+                        <div class="time-field">
+                            <label for="timeTo" class="sub-label">To</label>
+                            <input type="time" id="timeTo" name="timeTo" value="17:00">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- n8n Configuration -->
+                <div class="field-group">
+                    <label>n8n Configuration</label>
+                    <div class="sub-field">
+                        <label for="webhookUrl" class="sub-label">Webhook URL</label>
+                        <input type="url" id="webhookUrl" name="webhookUrl" placeholder="https://your-n8n-instance.com/webhook/...">
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="button-group">
+                    <button type="button" id="previewBtn" class="btn btn-secondary">Preview Schedule</button>
+                    <button type="submit" id="deployBtn" class="btn btn-primary">Deploy Campaign</button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Preview Section -->
+        <div id="previewSection" class="card preview-card" style="display: none;">
+            <h2>Schedule Preview</h2>
+            <div id="previewSummary" class="preview-summary"></div>
+            <div id="previewTimeline" class="preview-timeline"></div>
+        </div>
+
+        <!-- Status Messages -->
+        <div id="statusMessage" class="toast-message"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
